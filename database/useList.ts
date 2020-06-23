@@ -8,7 +8,17 @@ export type ListHook = LoadingHook<database.DataSnapshot[], FirebaseError>;
 export type ListKeysHook = LoadingHook<string[], FirebaseError>;
 export type ListValsHook<T> = LoadingHook<T[], FirebaseError>;
 
-export const useList = (query?: database.Query | null): ListHook => {
+export const useList = (
+  query?: database.Query | database.Query[] | null
+): ListHook => {
+  if (typeof query === 'object' && Array.isArray(query)) {
+    return useListMulti(query);
+  } else {
+    return useListSimple(query);
+  }
+};
+
+export const useListSimple = (query?: database.Query | null): ListHook => {
   const [state, dispatch] = useListReducer();
 
   const ref = useIsEqualRef(query, () => dispatch({ type: 'reset' }));

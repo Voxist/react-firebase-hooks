@@ -5,6 +5,7 @@ export {
   ListHook,
   ListKeysHook,
   ListValsHook,
+  useListMulti,
 } from './useList';
 export {
   useObject,
